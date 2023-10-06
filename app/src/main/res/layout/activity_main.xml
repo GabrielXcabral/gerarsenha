@@ -30,15 +30,19 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="88dp"
-        android:layout_height="wrap_content"
+        android:layout_width="122dp"
+        android:layout_height="41dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="169dp"
-        android:layout_marginTop="88dp"
-        android:layout_marginEnd="138dp"
-        android:text="TextView" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="145dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="128dp"
+        android:layout_marginBottom="642dp"
+        android:text="SENHAS"
+        android:textAlignment="center"
+        android:textStyle="bold" />
 
 
 </RelativeLayout>
