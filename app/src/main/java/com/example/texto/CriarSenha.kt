@@ -1,5 +1,7 @@
 package com.example.texto
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -7,10 +9,17 @@ import android.widget.CheckBox
 import android.widget.SeekBar
 import android.widget.TextView
 
+
+
 class CriarSenha : AppCompatActivity() {
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_criar_senha)
+
+        val repository = (applicationContext as MyApp).repository
 
         val tamanhodasenhacomseekbar = findViewById<SeekBar>(R.id.seekBar);
         val texto = findViewById<TextView>(R.id.textView3);
@@ -34,7 +43,7 @@ class CriarSenha : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 // Quando o usuário soltar a barra, atualize o valor
                 tamanhodasenha = tamanhodasenhacomseekbar.progress + 1;
-                texto.text = "Tamanho da senha: $tamanhodasenha"
+                texto.text = "Tamanho da senha: $tamanhodasenha";
             }
 
         })
@@ -45,7 +54,15 @@ class CriarSenha : AppCompatActivity() {
             val caracter = checkboxcaracter.isChecked;
             val tamanho = tamanhodasenha;
 
-            val senha = GerarSenha.criarsenha(letramaiuscula, numero, caracter, tamanho);
+            val senha = Gerador.criarsenha(letramaiuscula, numero, caracter, tamanho);
+
+            repository.adicionarsenhas(senha);
+
+            val intent = Intent(this, MainActivity::class.java);
+            //intent.putExtra("senha", senha);
+            /*setResult(Activity.RESULT_OK, intent);
+            finish();*/
+            startActivity(intent);
 
         }
 
