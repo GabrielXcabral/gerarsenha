@@ -1,5 +1,6 @@
 package com.example.texto
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,24 +10,30 @@ import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.TextView
 
-
-
-class CriarSenha : AppCompatActivity() {
-
+class Edicao : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_criar_senha)
+        setContentView(R.layout.activity_edicao)
 
         val repository = (applicationContext as MyApp).repository
 
-        val tamanhodasenhacomseekbar = findViewById<SeekBar>(R.id.seekBar);
+        val descricaosenha = intent.getStringExtra("descricao");
+
+        val tamanhodasenhacomseekbar = findViewById<SeekBar>(R.id.edicaoseekBar);
         val texto = findViewById<TextView>(R.id.textView3);
-        val nomedasenha = findViewById<EditText>(R.id.descricaoedit)
-        val bntgerarsenha = findViewById<Button>(R.id.buttoncriarsenha);
+        val nomedasenha = findViewById<EditText>(R.id.descricaoedit);
+        val bnteditar = findViewById<Button>(R.id.buttonalterar);
+        val bntexluir = findViewById<Button>(R.id.buttonexcluir)
         val checkboxletramaiuscula = findViewById<CheckBox>(R.id.checkBoxLetraMaiuscula);
         val checkboxcaracter = findViewById<CheckBox>(R.id.checkBoxCaracter);
         val checkboxnumero = findViewById<CheckBox>(R.id.checkBoxNumero);
-        val bntvoltar = findViewById<Button>(R.id.bntvoltar);
+        val exibirsenha = findViewById<TextView>(R.id.exibirsenha);
+        val bntvoltar = findViewById<Button>(R.id.bntvoltar)
+
+        val senha = descricaosenha?.let { repository.getSenha(descricaosenha) };
+        exibirsenha.text = senha;
+
+        nomedasenha.setText(descricaosenha);
 
         var tamanhodasenha = tamanhodasenhacomseekbar.progress + 1;
 
@@ -48,7 +55,7 @@ class CriarSenha : AppCompatActivity() {
 
         })
 
-        bntgerarsenha.setOnClickListener(){
+        bnteditar.setOnClickListener(){
             val letramaiuscula = checkboxletramaiuscula.isChecked;
             val numero = checkboxnumero.isChecked;
             val caracter = checkboxcaracter.isChecked;
@@ -57,21 +64,27 @@ class CriarSenha : AppCompatActivity() {
             val senha = Gerador.criarsenha(letramaiuscula, numero, caracter, tamanho);
             val descricao = nomedasenha.text.toString();
 
-            val objsenhasenha = Senha(descricao, senha);
+            repository.atualizarSenha(descricao, senha);
 
+            val intent = Intent(this, MainActivity::class.java);
+            //intent.putExtra("senha", senha);
+            /*setResult(Activity.RESULT_OK, intent);
+            finish();*/
+            startActivity(intent);
 
-            repository.adicionarsenhas(objsenhasenha);
+        }
+
+        bntexluir.setOnClickListener(){
+            val descricao = nomedasenha.text.toString();
+            repository.remover(descricao);
 
             val intent = Intent(this, MainActivity::class.java);
             startActivity(intent);
-
         }
 
         bntvoltar.setOnClickListener(){
             val intent = Intent(this, MainActivity::class.java);
             startActivity(intent);
         }
-
-
     }
 }

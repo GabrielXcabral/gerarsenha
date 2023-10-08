@@ -33,13 +33,28 @@ class MainActivity : AppCompatActivity() {
         listview.adapter = adapter;
 
         val senha = repository.getSenhas();
+        val descricaoesenhas = senha.map { it.getDescricao() to it.getSenha() }
 
 
         if (senha.isNotEmpty()){
-            armanezarsenha.addAll(senha);
-            adapter.notifyDataSetChanged();
-            listview.smoothScrollToPosition(armanezarsenha.size - 1);
+            for ((descricao, senha) in descricaoesenhas) {
+                val texto = "$descricao (${senha.length})"
+                armanezarsenha.add(texto);
+            }
+                adapter.notifyDataSetChanged();
+                listview.smoothScrollToPosition(armanezarsenha.size - 1);
+
         }
+
+        listview.setOnItemClickListener { parent, view, position, id ->
+            val nomenolistview = armanezarsenha[position]
+            val descricao = nomenolistview.replace(Regex("\\s*\\([^)]*\\)"), "");
+            val intent = Intent(this, Edicao::class.java)
+            intent.putExtra("descricao", descricao)
+            startActivity(intent)
+        }
+
+
 
         botao.setOnClickListener(){
 
@@ -55,5 +70,7 @@ class MainActivity : AppCompatActivity() {
             listview.smoothScrollToPosition(armanezartextos.size - 1);
             contador++;*/
         }
+
+
     }
 }
