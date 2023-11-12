@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
+import com.example.texto.banco.BancoHelper
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
@@ -32,13 +33,17 @@ class MainActivity : AppCompatActivity() {
         adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, armanezarsenha);
         listview.adapter = adapter;
 
-        val senha = repository.getSenhas();
-        val descricaoesenhas = senha.map { it.getDescricao() to it.getSenha() }
+        //val senha = repository.getSenhas();
+        //val descricaoesenhas = senha.map { it.getDescricao() to it.getSenha() }
+
+        val bancoHelper = BancoHelper(this);
+        val senhas = bancoHelper.getSenhas();
 
 
-        if (senha.isNotEmpty()){
-            for ((descricao, senha) in descricaoesenhas) {
-                val texto = "$descricao (${senha.length})"
+
+        if (senhas.isNotEmpty()){
+            for (senha in senhas) {
+                val texto = "${senha.getDescricao()} (${senha.getSenha().length})"
                 armanezarsenha.add(texto);
             }
                 adapter.notifyDataSetChanged();

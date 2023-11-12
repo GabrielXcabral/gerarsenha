@@ -9,6 +9,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.TextView
+import com.example.texto.banco.BancoHelper
 
 class Edicao : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,6 +17,7 @@ class Edicao : AppCompatActivity() {
         setContentView(R.layout.activity_edicao)
 
         val repository = (applicationContext as MyApp).repository
+        val bancoHelper = BancoHelper(this);
 
         val descricaosenha = intent.getStringExtra("descricao");
 
@@ -30,8 +32,10 @@ class Edicao : AppCompatActivity() {
         val exibirsenha = findViewById<TextView>(R.id.exibirsenha);
         val bntvoltar = findViewById<Button>(R.id.bntvoltar)
 
-        val senha = descricaosenha?.let { repository.getSenha(descricaosenha) };
-        exibirsenha.text = senha;
+        val senha = descricaosenha?.let { bancoHelper.getSenha(descricaosenha) };
+        if (senha != null) {
+            exibirsenha.text = senha.getSenha();
+        };
 
         nomedasenha.setText(descricaosenha);
 
@@ -64,7 +68,7 @@ class Edicao : AppCompatActivity() {
             val senha = Gerador.criarsenha(letramaiuscula, numero, caracter, tamanho);
             val descricao = nomedasenha.text.toString();
 
-            repository.atualizarSenha(descricao, senha);
+            bancoHelper.atualizarSenha(descricao, senha);
 
             val intent = Intent(this, MainActivity::class.java);
             //intent.putExtra("senha", senha);
@@ -76,7 +80,7 @@ class Edicao : AppCompatActivity() {
 
         bntexluir.setOnClickListener(){
             val descricao = nomedasenha.text.toString();
-            repository.remover(descricao);
+            bancoHelper.remover(descricao);
 
             val intent = Intent(this, MainActivity::class.java);
             startActivity(intent);

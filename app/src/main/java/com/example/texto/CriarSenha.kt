@@ -8,7 +8,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.TextView
-
+import com.example.texto.banco.BancoHelper
 
 
 class CriarSenha : AppCompatActivity() {
@@ -18,6 +18,7 @@ class CriarSenha : AppCompatActivity() {
         setContentView(R.layout.activity_criar_senha)
 
         val repository = (applicationContext as MyApp).repository
+        val bancoHelper = BancoHelper(this);
 
         val tamanhodasenhacomseekbar = findViewById<SeekBar>(R.id.seekBar);
         val texto = findViewById<TextView>(R.id.textView3);
@@ -60,7 +61,8 @@ class CriarSenha : AppCompatActivity() {
             val objsenhasenha = Senha(descricao, senha);
 
 
-            repository.adicionarsenhas(objsenhasenha);
+            //repository.adicionarsenhas(objsenhasenha);
+            bancoHelper.insert(objsenhasenha)
 
             val intent = Intent(this, MainActivity::class.java);
             startActivity(intent);
